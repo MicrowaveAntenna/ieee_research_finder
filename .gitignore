@@ -1,0 +1,15 @@
+# Local Python environment
+.venv/
+__pycache__/
+*.pyc
+
+# Large or regenerable data (download link in README.md)
+index/
+TEMPFILES/
+IEEE */*.json
+IEEE */*.txt
+IEEE */*.zip
+*.enrich-checkpoint.json
+
+# Machine-specific Claude Code config (template in README.md)
+.mcp.json

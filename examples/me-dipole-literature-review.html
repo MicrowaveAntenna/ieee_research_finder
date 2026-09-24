@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ME Dipole Literature Review</title>
+<meta name="description" content="示例对话：用 ieee-literature 检索工具为 wideband low-profile magnetoelectric dipole antenna 课题整理文献综述。">
+<style>
+  :root {
+    --bg: #f6f5f1;
+    --panel: #ffffff;
+    --text: #1f2328;
+    --muted: #6b6b66;
+    --border: #e2e0d8;
+    --user-bg: #e8edf5;
+    --tool-bg: #f1f0eb;
+    --code-bg: #ebe9e2;
+    --accent: #b5532b;
+    --link: #1d5bb8;
+    --ok: #2f7d4f;
+    --callout: #fbf3e8;
+    --callout-border: #e7c79d;
+    --chip-tap: #e3ecfa;
+    --chip-awpl: #e6f3ea;
+    --chip-apm: #f5e9f5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1b1b19;
+      --panel: #242422;
+      --text: #ebeae5;
+      --muted: #a3a29b;
+      --border: #3a3935;
+      --user-bg: #2d3441;
+      --tool-bg: #2a2a27;
+      --code-bg: #30302c;
+      --accent: #e0825c;
+      --link: #86b4ff;
+      --ok: #6cc592;
+      --callout: #2f2a22;
+      --callout-border: #6b5638;
+      --chip-tap: #2a3950;
+      --chip-awpl: #28402f;
+      --chip-apm: #43304a;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1b1b19;
+    --panel: #242422;
+    --text: #ebeae5;
+    --muted: #a3a29b;
+    --border: #3a3935;
+    --user-bg: #2d3441;
+    --tool-bg: #2a2a27;
+    --code-bg: #30302c;
+    --accent: #e0825c;
+    --link: #86b4ff;
+    --ok: #6cc592;
+    --callout: #2f2a22;
+    --callout-border: #6b5638;
+    --chip-tap: #2a3950;
+    --chip-awpl: #28402f;
+    --chip-apm: #43304a;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 15px/1.7 -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code, pre, .mono { font-family: ui-monospace, "Cascadia Code", Consolas, "SFMono-Regular", Menlo, monospace; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 16px; }
+
+  header.top { border-bottom: 1px solid var(--border); background: var(--panel); }
+  header.top .wrap { padding-top: 20px; padding-bottom: 16px; }
+  .eyebrow { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+  header.top h1 { margin: 4px 0 6px; font-size: 22px; line-height: 1.35; }
+  header.top p { margin: 0; color: var(--muted); font-size: 14px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .meta span { font-size: 12px; padding: 2px 8px; border: 1px solid var(--border); border-radius: 999px; color: var(--muted); }
+
+  main.chat { padding-top: 24px; padding-bottom: 32px; }
+  .msg { display: flex; gap: 12px; margin-bottom: 24px; }
+  .msg.user { justify-content: flex-end; }
+  .msg.user .bubble {
+    background: var(--user-bg);
+    border-radius: 16px 16px 4px 16px;
+    padding: 10px 16px;
+    max-width: 85%;
+  }
+  .avatar {
+    flex: 0 0 32px; height: 32px; border-radius: 50%;
+    background: var(--accent); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; margin-top: 2px;
+  }
+  .msg.agent .body { flex: 1; min-width: 0; }
+  .body > p:first-child { margin-top: 4px; }
+  .who { font-size: 12px; color: var(--muted); margin-bottom: 2px; }
+
+  details.tool {
+    background: var(--tool-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin: 8px 0;
+  }
+  details.tool > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 8px 12px;
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px;
+    font-size: 13.5px;
+  }
+  details.tool > summary::-webkit-details-marker { display: none; }
+  details.tool > summary::before {
+    content: "▸"; color: var(--muted); font-size: 11px; transition: transform .15s;
+  }
+  details.tool[open] > summary::before { transform: rotate(90deg); }
+  .tool-name { font-family: ui-monospace, Consolas, monospace; font-weight: 600; color: var(--accent); }
+  .tool-arg { color: var(--text); overflow-wrap: anywhere; }
+  .tool-meta { margin-left: auto; color: var(--ok); font-size: 12px; white-space: nowrap; }
+  .tool-body { padding: 0 12px 10px 12px; border-top: 1px dashed var(--border); }
+  .tool-body pre {
+    background: var(--code-bg); border-radius: 6px; padding: 8px 10px; margin: 10px 0 6px;
+    font-size: 12.5px; overflow-x: auto; white-space: pre;
+  }
+  ol.hits { margin: 6px 0 0; padding-left: 22px; font-size: 13.5px; }
+  ol.hits li { margin: 3px 0; }
+  .chip {
+    display: inline-block; font-size: 11.5px; padding: 0 6px; border-radius: 4px; margin-right: 4px;
+    font-family: ui-monospace, Consolas, monospace; white-space: nowrap;
+  }
+  .chip.tap { background: var(--chip-tap); }
+  .chip.awpl { background: var(--chip-awpl); }
+  .chip.apm { background: var(--chip-apm); }
+  .rank { color: var(--muted); font-size: 12px; white-space: nowrap; }
+  .step { color: var(--muted); font-size: 14px; margin: 14px 0 4px; }
+
+  .answer h3 { font-size: 17px; margin: 26px 0 8px; }
+  .answer h3:first-child { margin-top: 18px; }
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; background: var(--panel); }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; min-width: 640px; }
+  th, td { padding: 7px 10px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+  th { font-weight: 600; background: var(--tool-bg); white-space: nowrap; }
+  tr:last-child td { border-bottom: 0; }
+  td.num { white-space: nowrap; }
+  .callout {
+    background: var(--callout); border: 1px solid var(--callout-border);
+    border-radius: 8px; padding: 10px 14px; margin: 14px 0;
+  }
+  .draft {
+    position: relative;
+    background: var(--panel); border: 1px solid var(--border); border-left: 3px solid var(--accent);
+    border-radius: 8px; padding: 12px 16px 12px 16px; margin: 10px 0;
+    font-family: Georgia, "Times New Roman", serif; font-size: 14.5px; line-height: 1.65;
+  }
+  .draft p { margin: 0; }
+  button.copy {
+    position: absolute; top: 8px; right: 8px;
+    font: 12px/1 -apple-system, "Segoe UI", sans-serif;
+    padding: 5px 9px; border-radius: 6px; cursor: pointer;
+    background: var(--tool-bg); color: var(--text); border: 1px solid var(--border);
+  }
+  .draft p { padding-right: 56px; }
+  details.refs { margin: 8px 0; }
+  details.refs > summary { cursor: pointer; color: var(--link); }
+  details.refs ol { font-size: 13px; padding-left: 28px; }
+  details.refs li { margin: 4px 0; overflow-wrap: anywhere; }
+  .note { color: var(--muted); font-size: 13px; }
+
+  footer { border-top: 1px solid var(--border); color: var(--muted); font-size: 12.5px; }
+  footer .wrap { padding-top: 14px; padding-bottom: 28px; }
+  footer p { margin: 4px 0; }
+
+  @media (max-width: 560px) {
+    body { font-size: 14.5px; }
+    .avatar { flex-basis: 26px; height: 26px; font-size: 11px; }
+    .msg { gap: 8px; }
+    .msg.user .bubble { max-width: 92%; }
+    .tool-meta { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow">IEEE Research Finder · 示例对话</div>
+    <h1>为 wideband low-profile ME dipole 课题整理文献综述</h1>
+    <p>在 Claude Code 里提问，AI 助手调用本地 <code>ieee-literature</code> 检索工具（每次检索约 0.1 秒），读取返回的摘要后整理成回答。工具调用和返回结果为实际输出，结果列表只保留了标题和排名。</p>
+    <div class="meta">
+      <span>TAP 1960–2026 · AWPL 2002–2026 · APM 1990–2026</span>
+      <span>41,578 篇</span>
+      <span>BM25 + Qwen3-Embedding-0.6B</span>
+      <span>6 次工具调用</span>
+    </div>
+  </div>
+</header>
+
+<main class="chat wrap">
+
+  <div class="msg user">
+    <div class="bubble">我在写论文，课题是 <b>wideband low-profile magnetoelectric dipole antenna</b>。能帮我快速找相关论文，为 literature review 添砖加瓦吗？</div>
+  </div>
+
+  <div class="msg agent">
+    <div class="avatar">AI</div>
+    <div class="body">
+      <div class="who">AI 助手</div>
+      <p>我从 4 个角度同时检索：课题本身、磁电偶极子的早期奠基工作、降低剖面的具体技术、印刷式/平面化实现。</p>
+
+      <details class="tool">
+        <summary><span class="tool-name">search_papers</span><span class="tool-arg">"wideband low-profile magneto-electric dipole antenna"</span><span class="tool-meta">✓ 10 篇</span></summary>
+        <div class="tool-body">
+<pre>{"query": "wideband low-profile magneto-electric dipole antenna", "top_k": 10}</pre>
+          <ol class="hits">
+            <li><span class="chip awpl">AWPL 2026</span><a href="https://ieeexplore.ieee.org/document/11641270">A Wideband and Low-profile Magneto-Electric Dipole Antenna with Slotted Electric Dipole</a> <span class="rank">bm25 #1 · dense #2</span></li>
+            <li><span class="chip awpl">AWPL 2016</span><a href="https://ieeexplore.ieee.org/document/7387737">Low-Profile Magneto-Electric Dipole Antenna</a> <span class="rank">bm25 #4 · dense #1</span></li>
+            <li><span class="chip awpl">AWPL 2013</span><a href="https://ieeexplore.ieee.org/document/6423779">A Magneto-Electric Dipole Antenna With Low-Profile and Simple Structure</a> <span class="rank">bm25 #5 · dense #5</span></li>
+            <li><span class="chip tap">TAP 2012</span><a href="https://ieeexplore.ieee.org/document/6143984">A Low-Profile Magneto-Electric Dipole Antenna</a> <span class="rank">bm25 #7 · dense #4</span></li>
+            <li><span class="chip tap">TAP 2025</span><a href="https://ieeexplore.ieee.org/document/10752911">A Low-Profile Millimeter-Wave Broadband Magneto Electric Dipole Antenna With Fragmented Dipole Arm</a> <span class="rank">bm25 #10 · dense #6</span></li>
+            <li><span class="chip tap">TAP 2012</span><a href="https://ieeexplore.ieee.org/document/6236047">A Wideband Magneto-Electric Dipole Antenna</a> <span class="rank">bm25 #20 · dense #3</span></li>
+            <li><span class="chip tap">TAP 2025</span><a href="https://ieeexplore.ieee.org/document/10981941">Low-Profile Magneto-Electric Dipole Antenna With Capacitively Loaded Loop and Stub-Added Notch</a> <span class="rank">bm25 #8 · dense #14</span></li>
+            <li><span class="chip awpl">AWPL 2022</span><a href="https://ieeexplore.ieee.org/document/9613754">A Wideband Low-Profile Millimeter-Wave Magneto-Electric Dipole-Like Array With Low Transmission Loss Feed Network</a> <span class="rank">bm25 #3 · dense #25</span></li>
+            <li><span class="chip tap">TAP 2015</span><a href="https://ieeexplore.ieee.org/document/7091876">Wideband Magneto-Electric Dipole Antenna for 60-GHz Millimeter-Wave Communications</a> <span class="rank">bm25 #18 · dense #11</span></li>
+            <li><span class="chip awpl">AWPL 2022</span><a href="https://ieeexplore.ieee.org/document/9767603">Low-Profile Dual-Band Magneto-Electric Dipole Antenna Loaded With Metasurface</a> <span class="rank">bm25 #6 · dense #29</span></li>
+          </ol>
+        </div>
+      </details>
+
+      <details class="tool">
+        <summary><span class="tool-name">search_papers</span><span class="tool-arg">"magneto-electric dipole antenna complementary electric and magnetic dipoles stable unidirectional radiation wide bandwidth"</span><span class="tool-meta">✓ 8 篇 · ≤2016</span></summary>
+        <div class="tool-body">
+<pre>{"query": "magneto-electric dipole antenna complementary electric and magnetic dipoles stable unidirectional radiation wide bandwidth", "top_k": 8, "year_to": 2016}</pre>
+          <ol class="hits">
+            <li><span class="chip awpl">AWPL 2009</span><a href="https://ieeexplore.ieee.org/document/4926157">A Magneto-Electric Dipole With a Modified Ground Plane</a> <span class="rank">bm25 #1 · dense #1</span></li>
+            <li><span class="chip tap">TAP 2013</span><a href="https://ieeexplore.ieee.org/document/6575096">A Magneto-Electric Dipole for Unidirectional UWB Communications</a> <span class="rank">bm25 #2 · dense #2</span></li>
+            <li><span class="chip awpl">AWPL 2014</span><a href="https://ieeexplore.ieee.org/document/6888468">A Wideband Dual-Band Magneto-Electric Dipole Antenna With Improved Feeding Structure</a> <span class="rank">bm25 #5 · dense #4</span></li>
+            <li><span class="chip awpl">AWPL 2015</span><a href="https://ieeexplore.ieee.org/document/6939667">Crossed Dipole Loaded With Magneto-Electric Dipole for Wideband and Wide-Beam Circularly Polarized Radiation</a> <span class="rank">bm25 #6 · dense #6</span></li>
+            <li><span class="chip tap">TAP 2013</span><a href="https://ieeexplore.ieee.org/document/6308705">A Differential-Fed Magneto-Electric Dipole Antenna for UWB Applications</a> <span class="rank">bm25 #10 · dense #5</span></li>
+            <li><span class="chip tap">TAP 2012</span><a href="https://ieeexplore.ieee.org/document/6236047">A Wideband Magneto-Electric Dipole Antenna</a> <span class="rank">bm25 #14 · dense #3</span></li>
+            <li><span class="chip tap">TAP 2012</span><a href="https://ieeexplore.ieee.org/document/6192304">60 GHz Plated Through Hole Printed Magneto-Electric Dipole Antenna</a> <span class="rank">bm25 #3 · dense #15</span></li>
+            <li><span class="chip tap">TAP 2013</span><a href="https://ieeexplore.ieee.org/document/6280625">A Differentially-Driven Dual-Polarized Magneto-Electric Dipole Antenna</a> <span class="rank">bm25 #8 · dense #9</span></li>
+          </ol>
+        </div>
+      </details>
+
+      <details class="tool">
+        <summary><span class="tool-name">search_papers</span><span class="tool-arg">"reducing the height of magnetoelectric dipole antenna using artificial magnetic conductor or metasurface ground"</span><span class="tool-meta">✓ 8 篇</span></summary>
+        <div class="tool-body">
+<pre>{"query": "reducing the height of magnetoelectric dipole antenna using artificial magnetic conductor or metasurface ground", "top_k": 8}</pre>
+          <ol class="hits">
+            <li><span class="chip awpl">AWPL 2008</span><a href="https://ieeexplore.ieee.org/document/4488050">Enhancement of Radiation Along the Ground Plane From a Horizontal Dipole Located Close to It</a> <span class="rank">bm25 #6 · dense #7</span></li>
+            <li><span class="chip tap">TAP 2014</span><a href="https://ieeexplore.ieee.org/document/6725667">Near-Zero-Index Metamaterial Lens Combined With AMC Metasurface for High-Directivity Low-Profile Antennas</a> <span class="rank">bm25 #8 · dense #8</span></li>
+            <li><span class="chip awpl">AWPL 2022</span><a href="https://ieeexplore.ieee.org/document/9767603">Low-Profile Dual-Band Magneto-Electric Dipole Antenna Loaded With Metasurface</a> <span class="rank">bm25 #17 · dense #9</span></li>
+            <li><span class="chip awpl">AWPL 2025</span><a href="https://ieeexplore.ieee.org/document/11176152">A Novel Low-Profile Magnetoelectric Dipole Antenna With Resonant Ring</a> <span class="rank">bm25 #25 · dense #4</span></li>
+            <li><span class="chip awpl">AWPL 2022</span><a href="https://ieeexplore.ieee.org/document/9672759">A Low-Profile Ultrawideband Slotted Dipole Antenna Based on Artificial Magnetic Conductor</a> <span class="rank">bm25 #1 · dense #31</span></li>
+            <li><span class="chip awpl">AWPL 2018</span><a href="https://ieeexplore.ieee.org/document/8438998">Magnetoelectric Dipole Antenna With Low Profile</a> <span class="rank">bm25 #31 · dense #1</span></li>
+            <li><span class="chip tap">TAP 2005</span><a href="https://ieeexplore.ieee.org/document/1377585">Characterization of a volumetric metamaterial realization of an artificial magnetic conductor for antenna applications</a> <span class="rank">bm25 #12 · dense #15</span></li>
+            <li><span class="chip awpl">AWPL 2009</span><a href="https://ieeexplore.ieee.org/document/4435058">Effects of Artificial Magnetic Conductors in the Design of Low-Profile High-Gain Planar Antennas With High-Permittivity Dielectric Superstrate</a> <span class="rank">bm25 #11 · dense #18</span></li>
+          </ol>
+        </div>
+      </details>
+
+      <details class="tool">
+        <summary><span class="tool-name">search_papers</span><span class="tool-arg">"planar printed magnetoelectric dipole antenna substrate integrated low profile"</span><span class="tool-meta">✓ 8 篇</span></summary>
+        <div class="tool-body">
+<pre>{"query": "planar printed magnetoelectric dipole antenna substrate integrated low profile", "top_k": 8}</pre>
+          <ol class="hits">
+            <li><span class="chip awpl">AWPL 2018</span><a href="https://ieeexplore.ieee.org/document/8378253">A Low-Profile Substrate-Integrated-Gap-Waveguide-Fed Magnetoelectric Dipole</a> <span class="rank">bm25 #1 · dense #1</span></li>
+            <li><span class="chip awpl">AWPL 2023</span><a href="https://ieeexplore.ieee.org/document/10042030">A Low-Profile Dual-Polarized Substrate Integrated Magneto-Electric Dipole MIMO Antenna</a> <span class="rank">bm25 #6 · dense #6</span></li>
+            <li><span class="chip awpl">AWPL 2017</span><a href="https://ieeexplore.ieee.org/document/7582431">Substrate Integrated Magneto–Electric Dipole for UWB Application</a> <span class="rank">bm25 #2 · dense #11</span></li>
+            <li><span class="chip awpl">AWPL 2025</span><a href="https://ieeexplore.ieee.org/document/10834586">A Low-Profile Folded Magnetoelectric Dipole Antenna for Mobile Communication</a> <span class="rank">bm25 #12 · dense #5</span></li>
+            <li><span class="chip awpl">AWPL 2022</span><a href="https://ieeexplore.ieee.org/document/9767603">Low-Profile Dual-Band Magneto-Electric Dipole Antenna Loaded With Metasurface</a> <span class="rank">bm25 #3 · dense #18</span></li>
+            <li><span class="chip awpl">AWPL 2013</span><a href="https://ieeexplore.ieee.org/document/6423779">A Magneto-Electric Dipole Antenna With Low-Profile and Simple Structure</a> <span class="rank">bm25 #14 · dense #7</span></li>
+            <li><span class="chip tap">TAP 2012</span><a href="https://ieeexplore.ieee.org/document/6143984">A Low-Profile Magneto-Electric Dipole Antenna</a> <span class="rank">bm25 #17 · dense #8</span></li>
+            <li><span class="chip tap">TAP 2020</span><a href="https://ieeexplore.ieee.org/document/9154530">Millimeter-Wave Broadband Substrate Integrated Magneto-Electric Dipole Arrays With Corporate Low-Profile Microstrip Feeding Structures</a> <span class="rank">bm25 #5 · dense #25</span></li>
+          </ol>
+        </div>
+      </details>
+
+      <p class="step">第一轮结果很扎实。再做两步扩展：以剖面最低的 Ding &amp; Luk 2016（0.097λ₀）为起点找相似论文，并补查双极化方向。</p>
+
+      <details class="tool">
+        <summary><span class="tool-name">similar_papers</span><span class="tool-arg">Ding &amp; Luk, "Low-Profile Magneto-Electric Dipole Antenna", AWPL 2016</span><span class="tool-meta">✓ 8 篇</span></summary>
+        <div class="tool-body">
+<pre>{"paper": "10.1109/LAWP.2016.2519942", "top_k": 8}</pre>
+          <ol class="hits">
+            <li><span class="chip awpl">AWPL 2013</span><a href="https://ieeexplore.ieee.org/document/6423779">A Magneto-Electric Dipole Antenna With Low-Profile and Simple Structure</a> <span class="rank">bm25 #1 · dense #2</span></li>
+            <li><span class="chip awpl">AWPL 2018</span><a href="https://ieeexplore.ieee.org/document/8438998">Magnetoelectric Dipole Antenna With Low Profile</a> <span class="rank">bm25 #4 · dense #3</span></li>
+            <li><span class="chip tap">TAP 2012</span><a href="https://ieeexplore.ieee.org/document/6143984">A Low-Profile Magneto-Electric Dipole Antenna</a> <span class="rank">bm25 #7 · dense #1</span></li>
+            <li><span class="chip awpl">AWPL 2009</span><a href="https://ieeexplore.ieee.org/document/4926157">A Magneto-Electric Dipole With a Modified Ground Plane</a> <span class="rank">bm25 #6 · dense #5</span></li>
+            <li><span class="chip tap">TAP 2013</span><a href="https://ieeexplore.ieee.org/document/6575096">A Magneto-Electric Dipole for Unidirectional UWB Communications</a> <span class="rank">bm25 #3 · dense #9</span></li>
+            <li><span class="chip tap">TAP 2012</span><a href="https://ieeexplore.ieee.org/document/6236047">A Wideband Magneto-Electric Dipole Antenna</a> <span class="rank">bm25 #8 · dense #4</span></li>
+            <li><span class="chip awpl">AWPL 2014</span><a href="https://ieeexplore.ieee.org/document/6888468">A Wideband Dual-Band Magneto-Electric Dipole Antenna With Improved Feeding Structure</a> <span class="rank">bm25 #2 · dense #22</span></li>
+            <li><span class="chip awpl">AWPL 2018</span><a href="https://ieeexplore.ieee.org/document/8398441">A Simple Wideband Magnetoelectric Dipole Antenna With a Defected Ground Structure</a> <span class="rank">bm25 #11 · dense #17</span></li>
+          </ol>
+        </div>
+      </details>
+
+      <details class="tool">
+        <summary><span class="tool-name">search_papers</span><span class="tool-arg">"dual-polarized low-profile magneto-electric dipole antenna base station wideband"</span><span class="tool-meta">✓ 6 篇</span></summary>
+        <div class="tool-body">
+<pre>{"query": "dual-polarized low-profile magneto-electric dipole antenna base station wideband", "top_k": 6}</pre>
+          <ol class="hits">
+            <li><span class="chip awpl">AWPL 2026</span><a href="https://ieeexplore.ieee.org/document/11641270">A Wideband and Low-profile Magneto-Electric Dipole Antenna with Slotted Electric Dipole</a> <span class="rank">bm25 #1 · dense #3</span></li>
+            <li><span class="chip awpl">AWPL 2016</span><a href="https://ieeexplore.ieee.org/document/7387737">Low-Profile Magneto-Electric Dipole Antenna</a> <span class="rank">bm25 #14 · dense #4</span></li>
+            <li><span class="chip tap">TAP 2014</span><a href="https://ieeexplore.ieee.org/document/6824172">A Compact Dual-Polarized Printed Dipole Antenna With High Isolation for Wideband Base Station Applications</a> <span class="rank">bm25 #6 · dense #14</span></li>
+            <li><span class="chip awpl">AWPL 2023</span><a href="https://ieeexplore.ieee.org/document/10042030">A Low-Profile Dual-Polarized Substrate Integrated Magneto-Electric Dipole MIMO Antenna</a> <span class="rank">bm25 #2 · dense #27</span></li>
+            <li><span class="chip awpl">AWPL 2009</span><a href="https://ieeexplore.ieee.org/document/4731851">A Broadband Dual-Polarized Magneto-Electric Dipole Antenna With Simple Feeds</a> <span class="rank">bm25 #19 · dense #10</span></li>
+            <li><span class="chip tap">TAP 2012</span><a href="https://ieeexplore.ieee.org/document/6143984">A Low-Profile Magneto-Electric Dipole Antenna</a> <span class="rank">bm25 #18 · dense #11</span></li>
+          </ol>
+        </div>
+      </details>
+
+      <div class="answer">
+        <h3>降剖面的技术脉络</h3>
+        <p>这 6 次检索共找到约 25 篇相关论文。下表挑出了摘要里同时写明剖面和带宽的代表作，数字都取自摘要：</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>文献</th><th>降剖面手段</th><th>剖面</th><th>带宽（判据）</th><th>增益</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="https://ieeexplore.ieee.org/document/6143984">Ge &amp; Luk, TAP 2012</a></td><td>折叠短路贴片 + 腔体反射器</td><td class="num">0.173λ</td><td class="num">54.8%（SWR≤1.5）</td><td class="num">—</td></tr>
+              <tr><td><a href="https://ieeexplore.ieee.org/document/6423779">Ge &amp; Luk, AWPL 2013</a></td><td>折叠短路贴片，同轴馈电兼作巴伦</td><td class="num">0.169λ</td><td class="num">45.6%（SWR≤1.5）</td><td class="num">8.1±0.8 dBi</td></tr>
+              <tr><td><a href="https://ieeexplore.ieee.org/document/8438998">Ge 等, AWPL 2018</a></td><td>一对折叠短路贴片</td><td class="num">0.25λ₀ → <b>0.116λ₀</b></td><td class="num">43.6%（S11≤−10 dB）</td><td class="num">~9 dBi</td></tr>
+              <tr><td><a href="https://ieeexplore.ieee.org/document/7387737">Ding &amp; Luk, AWPL 2016</a></td><td>钝角三角形磁偶极子</td><td class="num"><b>0.097λ₀</b></td><td class="num">28.2%（SWR&lt;2）</td><td class="num">9.2±1.1 dBi</td></tr>
+              <tr><td><a href="https://ieeexplore.ieee.org/document/10042030">Liang 等, AWPL 2023</a></td><td>基片集成，金属过孔充当磁偶极子；双极化</td><td class="num">0.1λ</td><td class="num">40%（3–4.5 GHz）</td><td class="num">隔离度 &gt;27 dB</td></tr>
+              <tr><td><a href="https://ieeexplore.ieee.org/document/9767603">Gu 等, AWPL 2022</a></td><td>加载超表面；双频</td><td class="num"><b>0.058λ₀</b></td><td class="num">—</td><td class="num">—</td></tr>
+              <tr><td><a href="https://ieeexplore.ieee.org/document/11176152">Lu 等, AWPL 2025</a></td><td>双互补源 + 并联 Γ 形馈电</td><td class="num">0.15λ₀</td><td class="num">宽带、宽波束</td><td class="num">—</td></tr>
+              <tr><td><a href="https://ieeexplore.ieee.org/document/9613754">Zhang 等, AWPL 2022</a></td><td>毫米波：馈线和短路贴片做在同一层</td><td class="num">0.13λ</td><td class="num">64.7%（23.9–46.75 GHz）</td><td class="num">5.5±1.1 dBi</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout">
+          表里能直接看出一条主线：<b>剖面越低，带宽越窄</b>。0.173λ 时带宽是 54.8%，降到 0.097λ₀ 时只剩 28.2%。而且前者用的是更严格的 SWR≤1.5 判据，按同一判据比较，差距还会更大。
+        </div>
+
+        <p>近几年的工作主要在想办法把低剖面下丢掉的带宽补回来，思路是引入额外的谐振点：</p>
+        <ul>
+          <li>电容加载环（CLL）加开槽短截线：<a href="https://ieeexplore.ieee.org/document/10981941">TAP 2025</a></li>
+          <li>折叠辐射臂加不等长臂：<a href="https://ieeexplore.ieee.org/document/10834586">AWPL 2025</a></li>
+          <li>碎片化领结形电偶极子：<a href="https://ieeexplore.ieee.org/document/10752911">TAP 2025</a></li>
+          <li>开槽电偶极子：<a href="https://ieeexplore.ieee.org/document/11641270">AWPL 2026 early access</a>，这篇还没有摘要，只能看标题</li>
+        </ul>
+        <p><b>同时实现"宽带"和"剖面低于 0.1λ₀"仍然比较难</b>，这正好可以作为论文的切入点。</p>
+
+        <h3>可以直接改写的综述段落（英文草稿）</h3>
+        <div class="draft">
+          <button class="copy" type="button" data-target="draft-text">复制</button>
+          <p id="draft-text">Owing to the complementary combination of an electric dipole and a magnetic dipole, the magneto-electric (ME) dipole exhibits a wide impedance bandwidth, stable gain, and low back radiation [1]. Impedance bandwidths of 95.2% and even 110%–114% have been achieved with bowtie electric dipoles and improved feeding structures [2]–[4]. However, the original ME dipole has a profile of about 0.25λ0 [5]. By folding the vertical shorted patches, the profile was reduced to 0.173λ, 0.169λ, and 0.116λ0 [5]–[7], and an obtuse-triangular magnetic dipole further lowered it to 0.097λ0 [8]. Substrate-integrated designs, in which metallic vias serve as the magnetic dipole, reach about 0.1λ with a 40% bandwidth [9], and metasurface loading enables a profile of 0.058λ0 [10]. Nevertheless, the bandwidth generally decreases as the profile is reduced, e.g., from 54.8% (SWR ≤ 1.5) at 0.173λ [5] to 28.2% (SWR &lt; 2) at 0.097λ0 [8]. To recover the bandwidth, recent works introduce additional resonances through capacitively loaded loops and stub-added notches [11], unequal-length folded arms [12], and fragmented or slotted electric dipoles [13], [14].</p>
+        </div>
+
+        <details class="refs">
+          <summary>参考文献 [1]–[14]（IEEE 格式，均来自检索结果）</summary>
+          <ol>
+            <li>B. Q. Wu and K.-M. Luk, "A Magneto-Electric Dipole With a Modified Ground Plane," <i>IEEE Antennas Wireless Propag. Lett.</i>, vol. 8, pp. 627–629, 2009, doi: 10.1109/LAWP.2009.2022964.</li>
+            <li>L. Ge and K. M. Luk, "A Wideband Magneto-Electric Dipole Antenna," <i>IEEE Trans. Antennas Propag.</i>, vol. 60, no. 11, pp. 4987–4991, Nov. 2012, doi: 10.1109/TAP.2012.2207689.</li>
+            <li>L. Ge and K. M. Luk, "A Magneto-Electric Dipole for Unidirectional UWB Communications," <i>IEEE Trans. Antennas Propag.</i>, vol. 61, no. 11, pp. 5762–5765, Nov. 2013, doi: 10.1109/TAP.2013.2276924.</li>
+            <li>M. Li and K.-M. Luk, "A Differential-Fed Magneto-Electric Dipole Antenna for UWB Applications," <i>IEEE Trans. Antennas Propag.</i>, vol. 61, no. 1, pp. 92–99, Jan. 2013, doi: 10.1109/TAP.2012.2220100.</li>
+            <li>L. Ge, S. Gao, D. Zhang and M. Li, "Magnetoelectric Dipole Antenna With Low Profile," <i>IEEE Antennas Wireless Propag. Lett.</i>, vol. 17, no. 10, pp. 1760–1763, Oct. 2018, doi: 10.1109/LAWP.2018.2866064.</li>
+            <li>L. Ge and K. M. Luk, "A Low-Profile Magneto-Electric Dipole Antenna," <i>IEEE Trans. Antennas Propag.</i>, vol. 60, no. 4, pp. 1684–1689, Apr. 2012, doi: 10.1109/TAP.2012.2186260.</li>
+            <li>L. Ge and K. M. Luk, "A Magneto-Electric Dipole Antenna With Low-Profile and Simple Structure," <i>IEEE Antennas Wireless Propag. Lett.</i>, vol. 12, pp. 140–142, 2013, doi: 10.1109/LAWP.2013.2244054.</li>
+            <li>C. Ding and K.-M. Luk, "Low-Profile Magneto-Electric Dipole Antenna," <i>IEEE Antennas Wireless Propag. Lett.</i>, vol. 15, pp. 1642–1644, 2016, doi: 10.1109/LAWP.2016.2519942.</li>
+            <li>M.-S. Liang, Y. Zhou, X.-S. Yang and P.-F. Wu, "A Low-Profile Dual-Polarized Substrate Integrated Magneto-Electric Dipole MIMO Antenna," <i>IEEE Antennas Wireless Propag. Lett.</i>, vol. 22, no. 6, pp. 1431–1435, Jun. 2023, doi: 10.1109/LAWP.2023.3244031.</li>
+            <li>Y. Gu, X.-X. Yang, T. Lou and Y. Wu, "Low-Profile Dual-Band Magneto-Electric Dipole Antenna Loaded With Metasurface," <i>IEEE Antennas Wireless Propag. Lett.</i>, vol. 21, no. 7, pp. 1492–1496, Jul. 2022, doi: 10.1109/LAWP.2022.3172320.</li>
+            <li>H. Wang, Y. B. Park, and I. Park, "Low-Profile Magneto-Electric Dipole Antenna With Capacitively Loaded Loop and Stub-Added Notch," <i>IEEE Trans. Antennas Propag.</i>, vol. 73, no. 8, pp. 6163–6168, Aug. 2025, doi: 10.1109/TAP.2025.3564485.</li>
+            <li>Y. Chen, F. C. Zeng and Z.-Y. Zhang, "A Low-Profile Folded Magnetoelectric Dipole Antenna for Mobile Communication," <i>IEEE Antennas Wireless Propag. Lett.</i>, vol. 24, no. 5, pp. 1139–1143, May 2025, doi: 10.1109/LAWP.2025.3527565.</li>
+            <li>S. U. Oh, H. Yoo, and T. H. Jang, "A Low-Profile Millimeter-Wave Broadband Magneto Electric Dipole Antenna With Fragmented Dipole Arm," <i>IEEE Trans. Antennas Propag.</i>, vol. 73, no. 2, pp. 1203–1208, Feb. 2025, doi: 10.1109/TAP.2024.3493462.</li>
+            <li>A. Li <i>et al.</i>, "A Wideband and Low-profile Magneto-Electric Dipole Antenna with Slotted Electric Dipole," <i>IEEE Antennas Wireless Propag. Lett.</i>, early access, 2026, doi: 10.1109/LAWP.2026.3719937.</li>
+          </ol>
+        </details>
+
+        <h3>局限（写综述时要知道）</h3>
+        <ol>
+          <li><b>只覆盖 TAP、AWPL、APM 三本期刊。</b>IEEE Access、TMTT/MWTL、OJAP、IET、会议论文都不在库里。磁电偶极子最早的原始论文 K.-M. Luk and H. Wong, "A new wideband unidirectional antenna element," <i>Int. J. Microw. Opt. Technol.</i>, 2006 也不在库里；这条是 AI 助手凭自身知识补充的，不是检索结果，引用前请自行核实。</li>
+          <li><b>只有摘要级别的信息。</b>表里的数字都来自摘要；摘要里没写的（比如 Gu 2022 的带宽）就空着。写进论文之前，关键数据要回原文核对。</li>
+          <li><b>按相关度排序，看不出影响力。</b>库里没有被引次数，哪篇是领域经典需要自己判断。</li>
+          <li><b>数据截至 2026 年 8 月。</b>最新的 early access 论文可能只有标题。</li>
+        </ol>
+        <p><b>建议用法</b>：先按具体切入点检索、列出对比表，确定对标论文；再读这些论文的原文；最后自己改写成综述段落。比起在 IEEE Xplore 上一篇篇翻，找文献、整理对比这两步能省下大部分时间。</p>
+        <p>需要的话，我可以接着把表扩成完整版，每篇列上剖面、带宽判据、增益、交叉极化和尺寸，直接对标你的设计指标。</p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>示例对话 · 2026-09-24 · 工具：Claude Code + <code>ieee-literature</code>（本地 BM25 + Qwen3-Embedding-0.6B 混合检索）</p>
+    <p>数据：IEEE TAP 1960–2026、AWPL 2002–2026、APM 1990–2026，截至 2026-08。表中数字取自论文摘要，引用前请核对原文。</p>
+    <p><a href="https://github.com/MicrowaveAntenna/ieee_research_finder">GitHub 仓库</a> · <a href="../index.html">网页检索工具</a></p>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll("button.copy").forEach(function (btn) {
+    btn.addEventListener("click", async function () {
+      var text = document.getElementById(btn.dataset.target).innerText;
+      try {
+        await navigator.clipboard.writeText(text);
+        btn.textContent = "已复制";
+      } catch (e) {
+        btn.textContent = "复制失败";
+      }
+      setTimeout(function () { btn.textContent = "复制"; }, 1500);
+    });
+  });
+</script>
+</body>
+</html>

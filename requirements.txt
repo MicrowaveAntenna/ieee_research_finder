@@ -1,0 +1,12 @@
+requests>=2.31.0
+
+# Search index: scripts/build_corpus.py, build_index.py, search.py, mcp_server.py
+numpy>=2.0
+scipy>=1.13
+snowballstemmer>=2.2
+sentence-transformers>=5.0
+mcp>=2.2,<3
+
+# torch is pulled in by sentence-transformers. On CPU-only machines install the
+# small CPU wheel first, before `pip install -r requirements.txt`:
+#   pip install torch --index-url https://download.pytorch.org/whl/cpu
