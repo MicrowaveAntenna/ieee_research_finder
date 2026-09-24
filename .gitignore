@@ -8,6 +8,7 @@ index/
 TEMPFILES/
 IEEE */*.json
 IEEE */*.txt
+IEEE */*.zip
 *.enrich-checkpoint.json
 
 # Machine-specific Claude Code config (template in README.md)

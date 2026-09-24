@@ -22,13 +22,19 @@ local search engine over ~41k IEEE TAP / AWPL / APM papers that Claude Code can 
 | 做法抽取 / 蒸馏小模型 | 计划中 | — |
 | 定期更新 | 计划中 | — |
 
-### 数据不在仓库里
+### 数据下载
 
-数据集（`IEEE * metadata sets/*.json|*.txt`，含论文摘要）和检索索引（`index/`）体积大，未放入仓库；
-各数据集的覆盖范围与统计见对应文件夹下的 `-summary.md`。
+数据集（`IEEE * metadata sets/*.json|*.txt`，含论文摘要）不放在仓库里，而是作为 Release 附件发布：
+**[Dataset snapshot 2026-09-24](https://github.com/MicrowaveAntenna/ieee_research_finder/releases/tag/data-2026-09-24)**
 
-- 数据集与索引下载：**网盘链接待补充**
-- 下载后放到仓库根目录，结构为 `IEEE TAP metadata sets/…`、`index/…`
+| 压缩包 | 期刊 | 篇数 | 有摘要 |
+|--------|------|------|--------|
+| [`ieee-map-1990-2026.zip`](https://github.com/MicrowaveAntenna/ieee_research_finder/releases/download/data-2026-09-24/ieee-map-1990-2026.zip)（2 MB） | APM 1990–2026 | 2,719 | 94.3% |
+| [`ieee-awpl-2002-2026.zip`](https://github.com/MicrowaveAntenna/ieee_research_finder/releases/download/data-2026-09-24/ieee-awpl-2002-2026.zip)（9 MB） | AWPL 2002–2026 | 11,392 | 98.0% |
+| [`ieee-tap-1960-2026.zip`](https://github.com/MicrowaveAntenna/ieee_research_finder/releases/download/data-2026-09-24/ieee-tap-1960-2026.zip)（23 MB） | TAP 1960–2026（三段） | 27,515 | 95.9% |
+
+分别解压到仓库根目录下同名的 `IEEE * metadata sets` 文件夹。各数据集的覆盖范围与统计见文件夹里的 `-summary.md`。
+检索索引 `index/` 由脚本生成，不单独发布（见下方快速开始）。
 
 ### 快速开始（Windows）
 
@@ -37,7 +43,7 @@ python -m venv .venv
 .venv\Scripts\python.exe -m pip install torch --index-url https://download.pytorch.org/whl/cpu
 .venv\Scripts\python.exe -m pip install -r requirements.txt
 
-# 有数据集、没有 index/ 时：几秒钟重建清洗语料和关键词索引
+# 解压数据集后：几秒钟重建清洗语料和关键词索引
 .venv\Scripts\python.exe scripts\build_corpus.py
 .venv\Scripts\python.exe scripts\build_index.py --no-dense
 
@@ -46,8 +52,8 @@ python -m venv .venv
 .venv\Scripts\python.exe scripts\search.py --similar 10.1109/TAP.2020.3030907
 ```
 
-语义向量（`index/emb.npy`）需要 GPU 编码：用 `scripts/pack_server_job.py` 打包，在 GPU 服务器上按
-[`server/README.md`](server/README.md) 运行，再把结果拷回 `index/`；或直接下载网盘里的 `index/`。
+语义向量（`index/emb.npy`，支持中文提问、同义表述）需要 GPU 编码：用 `scripts/pack_server_job.py` 打包，
+在 GPU 服务器上按 [`server/README.md`](server/README.md) 运行，再把结果拷回 `index/`。没有语义向量时自动退回关键词检索。
 
 ### 在 Claude Code 里使用
 
@@ -67,6 +73,11 @@ python -m venv .venv
 
 之后直接提设计问题即可，例如"如何减小天线阵元之间的互耦"。
 
+### 示范对话
+
+- [为 wideband low-profile ME dipole 课题整理文献综述](https://microwaveantenna.github.io/ieee_research_finder/examples/me-dipole-literature-review.html)
+  （[源文件](examples/me-dipole-literature-review.html)）：6 次工具调用，整理出降剖面技术对比表、带宽与剖面的取舍趋势、可改写的英文综述段落和 IEEE 格式参考文献。
+
 ## 目录
 
 ```
@@ -76,5 +87,6 @@ InfoGet.md              IEEE 文献信息获取方法与数据源对比
 requirements.txt        本地检索依赖
 scripts/                采集、补全、清洗、建索引、检索、MCP 服务器
 server/                 GPU 服务器编码任务（check_env.py、run_embed.bat 等）
+examples/               示范对话（HTML，可在 GitHub Pages 上直接打开）
 IEEE * metadata sets/   各数据集统计说明（-summary.md）
 ```
